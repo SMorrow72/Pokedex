@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Snart's Pokedex!</title>
+</head>
+<body>
+    <div id="content">
+        <div id="pokedex">
+            <table id="pokedex_table">
+                <tr>
+                    <td id="dtCol">
+                        <div id="pokemon-details">
+                            <div id="pokemon-info"></div>
+                            <div id="pokemon-exp-info" style="opacity:0">
+                                <table>
+                                    <tr>
+                                        <td><strong>Type(s)</strong> </td>
+                                        <td><strong>Abilities</strong> </td>
+                                        <td><strong>Moves</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="typesCol" class="infoCol"></td>
+                                        <td id="abilCol" class="infoCol"></td>
+                                        <td id="movesCol" class="infoCol"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                    <td id="optionsCol">
+                        <div id="options">
+                            <button id="gen1_btn" class="opt_btn selected"><strong>Gen. 1</strong></button>
+                            <button id="gen2_btn" class="opt_btn"><strong>Gen. 2</strong></button>
+                            <button id="gen3_btn" class="opt_btn"><strong>Gen. 3</strong></button>
+                        </div>
+                    </td>
+                    <td id="listCol">
+                        <div id="pokemon-list"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
