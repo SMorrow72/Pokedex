@@ -1,62 +1,121 @@
 // JavaScript source code
 $(function () {
 
+    // GLOBAL HTML CONTROLS
+    var pokemonDiv = $("#pokemon-info");
+    var infoDiv = $("#pokemon-exp-info");
+    var titleRow = $(".titleRow");
+    var infoRow = $(".infoRow");
+    var optionsDiv = $("#options");
+    var listDiv = $("#list");
+
     var pokeApiUrl = "https://pokeapi.co/api/v2/generation/1";
     var pokemonByName = "https://pokeapi.co/api/v2/pokemon/";
+    var locationsUrl = "https://pokeapi.co/api/v2/location";
+    var abilUrl = "https://pokeapi.co/api/v2/ability";
 
-    var selectedBtn = $(".selected");
+    var selectedOption = $(".selectedOption");
+    var selectedNav = $(".selectedNav");
 
-    getList(pokeApiUrl);
+    $(".navBtn").click(function () {
+        selectedNav.toggleClass("selectedNav");
+        $(this).toggleClass("selectedNav");
 
-    $("#gen1_btn").on("click", changeGen);
-    $("#gen2_btn").on("click", changeGen);
-    $("#gen3_btn").on("click", changeGen);
-    $("#gen4_btn").on("click", changeGen);
-    $("#gen5_btn").on("click", changeGen);
-    $("#gen6_btn").on("click", changeGen);
-    $("#gen7_btn").on("click", changeGen);
-
-    function changeGen() {
-        selectedBtn.toggleClass("selected");
-        $(this).toggleClass("selected");
-        selectedBtn = $(this);
-
-        var id = selectedBtn.attr("id");
-        var gen;
-        if (id == "gen1_btn") {
-            gen = 1;
-        } else if (id == "gen2_btn") {
-            gen = 2;
-        } else if (id == "gen3_btn") {
-            gen = 3;
-        } else if (id == "gen4_btn") {
-            gen = 4;
-        } else if (id == "gen5_btn") {
-            gen = 5;
-        } else if (id == "gen6_btn") {
-            gen = 6;
-        } else if (id == "gen7_btn") {
-            gen = 7;
+        if ($(this).attr("id") == "pokemonBtn") {
+            pokemonMode();
+        } else if ($(this).attr("id") == "movesBtn") {
+            movesMode();
+        } else if ($(this).attr("id") == "locationsBtn") {
+            locationsMode();
+        } else {
+            abilitiesMode();
         }
 
-        pokeApiUrl = "https://pokeapi.co/api/v2/generation/" + gen;
-        $("#pokemon-list").empty();
-        getList(pokeApiUrl);
+    });
+
+    pokemonMode();
+
+    //*********************************
+    // MODE-SWITCH FUNCTIONS
+
+    function clearControls() {
+        pokemonDiv.empty();
+        titleRow.empty();
+        infoRow.empty();
+        optionsDiv.empty();
+        listDiv.empty();
     }
 
-    function getList(pokeApiUrl) {
+    function pokemonMode() {
+        clearControls();
+
+        appendGenBtn(1);
+        appendGenBtn(2);
+        appendGenBtn(3);
+        appendGenBtn(4);
+        appendGenBtn(5);
+        appendGenBtn(6);
+        appendGenBtn(7);
+
+        getPokemonList(pokeApiUrl);
+    }
+
+    function movesMode() {
+        clearControls();
+    }
+
+    function locationsMode() {
+        clearControls();
+        getLocationList(locationsUrl);
+    }
+
+    function abilitiesMode() {
+        clearControls();
+    }
+
+    //**********************************
+    // ELEMENT APPENDING FUNCTIONS
+
+    function appendGenBtn(gen) {
+        var btn = $("<button class='opt_btn'>").html("Gen. " + gen);
+
+        btn.click(function () {
+            selectedOption.toggleClass("selectedOption");
+            $(this).toggleClass("selectedOption");
+            selectedOption = $(this);
+
+            pokeApiUrl = "https://pokeapi.co/api/v2/generation/" + gen;
+            listDiv.empty();
+            getPokemonList(pokeApiUrl);
+        });
+
+        btn.appendTo(optionsDiv);
+    }
+
+    function appendTitleCol(text) {
+        var td;
+        var strong = $("<strong>").html(text);
+        td = $("<td>").append(strong);        
+
+        td.appendTo($(titleRow));
+    }
+
+    // LIST GENERATING FUNCTIONS
+
+    function getPokemonList(pokeApiUrl) {
         $.getJSON(pokeApiUrl).done(function (data) {
             console.log(data);
+
             $.each(data.pokemon_species, function (index, pokemon) {
                 var name = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
                 var link = $("<a>").attr("id", pokemon.name).attr("href", "#").append($("<strong>").text(name));
                 var par = $("<p>").html("No. " + (index + 1) + ": ").append(link);
 
-                par.appendTo("#pokemon-list");
+                par.appendTo("#list");
 
-                link.click(getDetails);
-
+                link.click(getPokemonDetails);
             });
+            
         }).fail(function () {
             console.log("Request to PokeApi failed.");
         }).always(function () {
@@ -64,11 +123,28 @@ $(function () {
         });
     }
 
-    function getDetails() {
+    function getLocationList(locationsUrl) {
+        $.getJSON(locationsUrl).done(function (data) {
+            console.log(data);
+
+            //$.each LEFT OFF HERE
+           
+
+
+        }).fail(function () {
+            console.log("Request to PokeApi failed.");
+        }).always(function () {
+            console.log("Pokemon is Sweeet!");
+        });
+    }
+
+
+    //DETAILS GENERATING FUNCTIONS
+
+    function getPokemonDetails() {
         var name = $(this).attr("id");
         $.getJSON(pokemonByName + name).done(function (details) {
             console.log(details);
-            var pokemonDiv = $("#pokemon-info");
             pokemonDiv.empty();
             pokemonDiv.css("opacity", 0);
 
@@ -80,20 +156,30 @@ $(function () {
             pokemonDiv.append("<img src='" + sprites.front_shiny + "'>");
             if (sprites.back_shiny)
                 pokemonDiv.append("<img src='" + sprites.back_shiny + "'>");
-            pokemonDiv.delay(300).fadeTo(500, 1);
+            pokemonDiv.delay(100).fadeTo(400, 1);
 
-            var infoDiv = $("#pokemon-exp-info");
+            titleRow.empty();
+
+            appendTitleCol("Type(s)");
+            appendTitleCol("Abilities");
+            appendTitleCol("Height");
+            appendTitleCol("Weight");
+            
             infoDiv.css("opacity", 0);
-            //infoDiv.css("opacity", 0);
-            var typeCol = $("#typesCol");
-            var abilCol = $("#abilCol");
-            var movesList = $("#movesList");
 
-            $(".infoCol").empty();
+            //var typeCol = $("#typesCol");
+            var typeCol = $("<td>").attr("id", "typesCol").attr("class", "infoCol");
+            //var abilCol = $("#abilCol");
+            var abilCol = $("<td>").attr("id", "abilCol").attr("class", "infoCol");
+            var heightCol = $("<td>").attr("id", "heightCol").attr("class", "infoCol");
+            var weightCol = $("<td>").attr("id", "weightCol").attr("class", "infoCol");
 
-            movesList.empty();
+            infoRow.empty();
+            $(".infoCol").empty();           
 
             //typeCol.append("<td><p><strong>Type(s): </strong></p>");
+
+            // GET TYPES, ABILITIES, HEIGHT, AND WEIGHT
 
             var types = details.types;
             types.forEach(function (item) {
@@ -109,10 +195,20 @@ $(function () {
             });
 
             var heightm = details.height / 10;
-            $("#heightCol").append("<p>" + heightm + " m");
+            heightCol.append("<p>" + heightm + " m");
             var weightKg = details.weight / 10;
-            $("#weightCol").append("<p>" + weightKg + " kg.");
+            weightCol.append("<p>" + weightKg + " kg.");
 
+            typeCol.appendTo(infoRow);
+            abilCol.appendTo(infoRow);
+            heightCol.appendTo(infoRow);
+            weightCol.appendTo(infoRow);
+
+            infoDiv.append("<h2>Moves</h2>");
+
+            // GENERATE MOVES LIST
+
+            var movesList = $("<ul>").css("id", "movesList");
 
             var moves = details.moves;
             moves.forEach(function (item) {
@@ -120,7 +216,9 @@ $(function () {
                 movesList.append("<li>" + moveName.charAt(0).toUpperCase() + moveName.slice(1) + " ");
             });
 
-            infoDiv.delay(800).fadeTo(500, 1);
+            movesList.appendTo(infoDiv);
+
+            infoDiv.delay(400).fadeTo(400, 1);
         });
         event.preventDefault();
     }

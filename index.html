@@ -9,9 +9,18 @@
     <title>Snart's Pokedex!</title>
 </head>
 <body>
-    <div id="content">
+    <div id="content">       
         <div id="pokedex">
-            <h1 style="margin:8px 25px">Pokédex</h1>
+            <table class="nav" >
+                <tr>
+                    <td><h1 style="margin: 10px">Pokédex</h1></td>
+                    <td><button id="pokemonBtn" class="navBtn selectedNav">Pokémon</button></td>
+                    <td><button id="movesBtn" class="navBtn">Moves</button></td>
+                    <td><button id="locationsBtn" class="navBtn">Locations</button></td>
+                    <td><button id="abilBtn" class="navBtn">Abilities</button></td>
+
+                </tr>
+            </table>
             <table id="pokedex_table">
                 <tr>
                     <td id="dtCol">
@@ -19,37 +28,17 @@
                             <div id="pokemon-info"></div>
                             <div id="pokemon-exp-info" style="opacity:0">
                                 <table class="infoTable">
-                                    <tr>
-                                        <td><strong>Type(s)</strong> </td>
-                                        <td><strong>Abilities</strong> </td>
-                                        <td><strong>Height</strong></td>
-                                        <td><strong>Weight</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="typesCol" class="infoCol"></td>
-                                        <td id="abilCol" class="infoCol"></td>
-                                        <td id="heightCol" class="infoCol"></td>
-                                        <td id="weightCol" class="infoCol"></td>
-                                    </tr>
+                                    <tr class="titleRow"></tr>
+                                    <tr class="infoRow"></tr>
                                 </table>
-                                <h2>Moves</h2>
-                                <ul id="movesList"></ul>
                             </div>
                         </div>
                     </td>
                     <td id="optionsCol">
-                        <div id="options">
-                            <button id="gen1_btn" class="opt_btn selected"><strong>Gen. 1</strong></button>
-                            <button id="gen2_btn" class="opt_btn"><strong>Gen. 2</strong></button>
-                            <button id="gen3_btn" class="opt_btn"><strong>Gen. 3</strong></button>
-                            <button id="gen4_btn" class="opt_btn"><strong>Gen. 4</strong></button>
-                            <button id="gen5_btn" class="opt_btn"><strong>Gen. 5</strong></button>
-                            <button id="gen6_btn" class="opt_btn"><strong>Gen. 6</strong></button>
-                            <button id="gen7_btn" class="opt_btn"><strong>Gen. 7</strong></button>
-                        </div>
+                        <div id="options"></div>
                     </td>
                     <td id="listCol">
-                        <div id="pokemon-list"></div>
+                        <div id="list"></div>
                     </td>
                 </tr>
             </table>
