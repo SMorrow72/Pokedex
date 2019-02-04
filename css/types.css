@@ -1,0 +1,128 @@
+.type-label {
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 2px 2px #8e8e8e;
+    border: 3px solid;
+    border-radius: 5px;
+    box-shadow: 2px 2px #888888;
+    clear:both;
+    float:left;
+    margin-bottom: 0px;
+}
+
+.type-btn {
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 2px 2px #8e8e8e;
+    border: 2px solid;
+    border-radius: 5px;
+    box-shadow: 2px 2px #888888;
+    clear: both;
+    float:none;
+    margin: 2px 2px;
+    width:47%;
+}
+
+.normal {
+    background-color: #c6bd91;
+    border-color: #c6bd91;
+}
+
+.fighting {
+    background-color: #f7291b;
+    border-color: #f7291b;
+}
+
+.flying {
+    background-color: #d9bfff;
+    border-color: #d9bfff;
+}
+
+.poison {
+    background-color: #d655d6;
+    border-color: #d655d6;
+}
+
+.ground {
+    background-color: #f4e07a;
+    border-color: #f4e07a;
+}
+
+.rock {
+    background-color: #ccb853;
+    border-color: #ccb853;
+}
+
+.bug {
+    background-color: #bed655;
+    border-color: #bed655;
+}
+
+.ghost {
+    background-color: #76459e;
+    border-color: #76459e;
+}
+
+.steel {
+    background-color: #bdc1c1;
+    border-color: #bdc1c1;
+}
+
+.fire {
+    background-color: #ff912b;
+    border-color: #ff912b;
+}
+
+.water {
+    background-color: #32cfff;
+    border-color: #32cfff;
+}
+
+.grass {
+    background-color: #54f75e;
+    border-color: #54f75e;
+}
+
+.electric {
+    background-color: #fff83a;
+    border-color: #fff83a;
+}
+
+.psychic {
+    background-color: #ff357f;
+    border-color: #ff357f;
+}
+
+.ice {
+    background-color: #aafffd;
+    border-color: #aafffd;
+}
+
+.dragon {
+    background-color: #7919ff;
+    border-color: #7919ff;
+}
+
+.dark {
+    background-color: #4c3f28;
+    border-color: #4c3f28;
+}
+
+.fairy {
+    background-color: #ff93f7;
+    border-color: #ff93f7;
+}
+
+.unknown {
+    background-color: #8d9390;
+    border-color: #8d9390;
+}
+
+.shadow {
+    background-color: #2b2d2c;
+    border-color: #2b2d2c;
+}
