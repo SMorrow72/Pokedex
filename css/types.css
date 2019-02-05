@@ -14,17 +14,17 @@
 
 .type-btn {
     color: #ffffff;
-    font-family: monospace;
     font-size: 14px;
     font-weight: bold;
     text-shadow: 2px 2px #8e8e8e;
     border: 2px solid;
-    border-radius: 5px;
     box-shadow: 2px 2px #888888;
     clear: both;
     float:none;
     margin: 2px 2px;
     width:47%;
+    font-family: monospace;
+    border-radius: 5px;
 }
 
 .normal {

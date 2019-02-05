@@ -29,38 +29,30 @@
     height: 20px;
 }
 
-.navBtn {
-    margin: 10px;
-    font-family: inherit;
-    background-color: #18dd22;
-    border: 3px solid #11a319;
-    border-radius: 5px;
-    font-size: 20px;
-}
 
-.selectedNav {
-    background-color: #11a319;
-    border: 3px solid #18dd22;
-}
 
 #pokedex_table {
     margin: auto;
     vertical-align: middle;
     height: 90%;
     width: 95%;
-    color: #48492e;
 }
 
 #pokedex_table tr {
     margin: 10px;
 }
 
-#dtCol{
-    width:55%;
+#dtCol {
+    color: #48492e;
+    width: 55%;
 }
 
 #optionsCol{
     width:15%;
+}
+
+#options{
+    height:90%;
 }
 
 #listCol{
@@ -97,18 +89,48 @@
     margin:5px;
 }
 
-.opt_btn {
-    margin: 10px 15px;
-    vertical-align: top;
-    background-color: #4286f4;
-    border: 3px solid #1f4ce0;
-    border-radius: 5px;
-    font-size: 14px;
+/*Buttons:*/
+
+.btn {
     font-family: monospace;
+    border-style:solid;
+    border-width: 2px;
+    border-radius: 5px;
 }
 
-   .selectedOption {
-        background-color: #1f4ce0;
-        border: 3px solid #4286f4;
-    }
+.navBtn {
+    margin: 10px;
+    background-color: #18dd22;
+    border-color: #11a319;
+    font-size: 20px;
+}
+
+.selectedNav {
+    background-color: #11a319;
+    border-color: #18dd22;
+}
+
+.opt_btn {
+    margin: 10px 35px;
+    vertical-align: top;
+    background-color: #4286f4;
+    border-color: #1f4ce0;
+    font-size: 14px;    
+}
+
+.selectedOption {
+    background-color: #1f4ce0;
+    border-color: #4286f4;
+}
+
+.sortBy_btn {
+    vertical-align: top;
+}
+
+.selectedSort {
+    background-color: #fc20b6;
+    border-color: #ff4cc6;
+}
+
+
 /*# sourceMappingURL=style.css.map */

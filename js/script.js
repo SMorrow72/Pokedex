@@ -11,8 +11,10 @@ $(function () {
 
     var pokeApiUrl = "https://pokeapi.co/api/v2/generation/1";
     var pokemonByName = "https://pokeapi.co/api/v2/pokemon/";
-    var locationsUrl = "https://pokeapi.co/api/v2/location";
-    var abilUrl = "https://pokeapi.co/api/v2/ability";
+    var abilUrl = "https://pokeapi.co/api/v2/ability?limit=300";
+    var singleAbilUrl = "https://pokeapi.co/api/v2/ability";
+    var berriesUrl = "https://pokeapi.co/api/v2/berry?limit=100";
+    var singleBerryUrl = "https://pokeapi.co/api/v2/berry";
     var movesUrl = "https://pokeapi.co/api/v2/move?limit=800";
     var singleMoveUrl = "https://pokeapi.co/api/v2/move";
 
@@ -28,10 +30,10 @@ $(function () {
             pokemonMode();
         } else if ($(this).attr("id") == "movesBtn") {
             movesMode();
-        } else if ($(this).attr("id") == "locationsBtn") {
-            locationsMode();
-        } else {
+        } else if ($(this).attr("id") == "abilBtn") {
             abilitiesMode();
+        } else {
+            berriesMode();
         }
 
     });
@@ -52,6 +54,28 @@ $(function () {
     function pokemonMode() {
         clearControls();
 
+        //Opening message from Professor Oak
+        pokemonDiv.append("<img src='images/prof_oak.png' style='margin: 5px 165px' >")
+        pokemonDiv.append("<p>Hello there! Welcome to the world of pokemon! My name is Oak! People call me the pokemon Prof! This world is inhabited by creatures called pokemon! For some people, pokemon are pets. Others use them for fights. Myself... I study pokemon as a profession.</p>");
+        pokemonDiv.append("<p>This here is my latest invention, the Pokedex! It automatically records data on Pokemon you've seen or caught! It's a hi-tech encyclopedia!</p>");
+        pokemonDiv.append("<p>To make a complete guide on all the Pokemon in the world... That was my dream! But, I'm too old! I can't do it! So, I want you two to fulfill my dream for me! Get moving, you two! This is a great undertaking in Pokemon history!</p>");
+       
+        var sortForm = $("<form id='sortForm'>");
+        sortForm.append("<h2>Sort By:</h2>");
+        var sortBtn1 = $("<label class='container'>Gen<input type='radio' class='btn sortBy_btn' name='sortMode' value='gen' checked='checked'></label>");
+        var sortBtn2 = $("<label class='container'>Type<input type='radio' class='btn sortBy_btn' name='sortMode' value='type'></label>");
+
+        sortBtn1.change(sortSwitch);
+        sortBtn2.change(sortSwitch);
+
+        sortForm.append(sortBtn1);
+        sortForm.append(sortBtn2);
+
+        optionsDiv.append(sortForm);
+
+        var genBtnDiv = $("<div>").attr("id", "genBtnDiv").css("margin", "0").css("padding", "0");
+        genBtnDiv.appendTo(optionsDiv);
+
         appendGenBtn(1);
         appendGenBtn(2);
         appendGenBtn(3);
@@ -60,29 +84,41 @@ $(function () {
         appendGenBtn(6);
         appendGenBtn(7);
 
+        
+
+        appendTypeBtns("pokemon");
+        var typeBtnDiv = $("#typeBtnDiv");
+        typeBtnDiv.css("display", "none");
+
         getPokemonList(pokeApiUrl);
     }
 
     function movesMode() {
         clearControls();
         getMovesList(movesUrl);
-        appendTypeBtns();      
-    }
-
-    function locationsMode() {
-        clearControls();
-        getLocationList(locationsUrl);
+        appendTypeBtns("moves");      
     }
 
     function abilitiesMode() {
         clearControls();
+        getAbilityList(abilUrl);
+
     }
 
+    function berriesMode() {
+        clearControls();
+        getBerriesList(berriesUrl);
+    } 
+
+
+
     //**********************************
-    // ELEMENT APPENDING FUNCTIONS
+    // ELEMENT-APPENDING FUNCTIONS
 
     function appendGenBtn(gen) {
-        var btn = $("<button class='opt_btn'>").html("Gen. " + gen);
+        var btn = $("<button class='btn opt_btn'>").html("Gen. " + gen);
+
+        var genBtnDiv = $("#genBtnDiv");
 
         btn.click(function () {
             selectedOption.toggleClass("selectedOption");
@@ -94,12 +130,13 @@ $(function () {
             getPokemonList(pokeApiUrl);
         });
 
-        btn.appendTo(optionsDiv);
+        btn.appendTo(genBtnDiv);
     }
 
-    function appendTypeBtns() {
+    function appendTypeBtns(mode) {
         
         var typeLink = "https://pokeapi.co/api/v2/type";
+        var typeBtnDiv = $("<div>").attr("id", "typeBtnDiv").css("margin", "0").css("padding", "0");
 
         $.getJSON(typeLink).done(function (data) {
             $.each(data.results, function (index, type) {
@@ -113,37 +150,40 @@ $(function () {
                     listDiv.empty();
 
                     $.getJSON(singleTypeLink).done(function (typeData) {
-                        $.each(typeData.moves, function (index, move) {
-                            var name = move.name.charAt(0).toUpperCase() + move.name.slice(1);
-                            var link = $("<a>").attr("id", move.name).attr("href", "#").append($("<strong>").text(name));
-                            var par = $("<p>").append(link);
-
-                            par.appendTo(listDiv);
-
-                            link.click(getMovesDetails);
-                        });
+                        if (mode == "moves") {
+                            $.each(typeData.moves, function (index, move) {
+                                fillList(move.name, getMovesDetails);
+                            });
+                        } else if (mode == "pokemon") {
+                            $.each(typeData.pokemon, function (index, pokemon) {
+                                fillList(pokemon.pokemon.name, getPokemonDetails);
+                            });
+                        }                        
 
                     }).fail(function () {
                         console.log("Request to PokeApi failed.");
                     });
                 });
 
-                btn.appendTo(optionsDiv);
-
-            }).fail(function () {
-                console.log("Request to PokeApi failed.");
+                btn.appendTo(typeBtnDiv);            
             });
 
         }).fail(function () {
             console.log("Request to PokeApi failed.");
         }); 
 
-        var allBtn = $("<button class='opt_btn'>").html("All Types");
+        var allBtn = $("<button class='btn opt_btn'>").html("All Types");
 
         allBtn.click(function () {
-            getMovesList(movesUrl);
+            if (mode == "moves") {
+                getMovesList(movesUrl);
+            } else if (mode == "pokemon") {
+                getPokemonList(pokeApiUrl);
+            }
+            
         });
-        optionsDiv.append(allBtn);
+        typeBtnDiv.append(allBtn);
+        optionsDiv.append(typeBtnDiv);
 
     }
 
@@ -155,20 +195,43 @@ $(function () {
         td.appendTo($(titleRow));
     }
 
+    //MISCELLANEOUS FUNCTIONS
+
+    function fillList(entry, detailsFn) {
+        var name = entry.charAt(0).toUpperCase() + entry.slice(1);
+        var link = $("<a>").attr("id", entry).attr("href", "#").append($("<strong>").text(name));
+        var par = $("<p>").append(link);
+
+        par.appendTo(listDiv);
+        link.click(detailsFn);
+    }
+
+    function sortSwitch() {
+        var genBtnDiv = $("#genBtnDiv");
+        var typeBtnDiv = $("#typeBtnDiv");
+
+        if (genBtnDiv.css("display") == "none") {
+            typeBtnDiv.slideToggle(300);
+            genBtnDiv.delay(400).slideToggle(300);
+        } else {
+            genBtnDiv.slideToggle(300);
+            typeBtnDiv.delay(400).slideToggle(300);
+        }
+
+    }
+
+
+
     // LIST GENERATING FUNCTIONS
 
     function getPokemonList(pokeApiUrl) {
         $.getJSON(pokeApiUrl).done(function (data) {
             console.log(data);
 
+            listDiv.empty();
             $.each(data.pokemon_species, function (index, pokemon) {
-                var name = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
-                var link = $("<a>").attr("id", pokemon.name).attr("href", "#").append($("<strong>").text(name));
-                var par = $("<p>").html("No. " + (index + 1) + ": ").append(link);
-
-                par.appendTo("#list");
-
-                link.click(getPokemonDetails);
+                fillList(pokemon.name, getPokemonDetails);
+ 
             });
             
         }).fail(function () {
@@ -178,35 +241,12 @@ $(function () {
         });
     }
 
-
-    function getLocationList(locationsUrl) {
-        $.getJSON(locationsUrl).done(function (data) {
-            console.log(data);
-
-            //$.each LEFT OFF HERE
-           
-
-
-        }).fail(function () {
-            console.log("Request to PokeApi failed.");
-        }).always(function () {
-            console.log("Pokemon is Sweeet!");
-        });
-    }
-
     function getMovesList(movesUrl){
         $.getJSON(movesUrl).done(function (data) {
-            //console.log(data);
             listDiv.empty();
 
             $.each(data.results, function (index, move) {
-                var name = move.name.charAt(0).toUpperCase() + move.name.slice(1);
-                var link = $("<a>").attr("id", move.name).attr("href", "#").append($("<strong>").text(name));
-                var par = $("<p>").append(link);
-
-                par.appendTo(listDiv);
-
-                link.click(getMovesDetails);
+                fillList(move.name, getMovesDetails);
             });
 
         }).fail(function () {
@@ -216,6 +256,32 @@ $(function () {
         });
     }
 
+    function getAbilityList(abilUrl) {
+        $.getJSON(abilUrl).done(function (data) {
+
+            listDiv.empty();
+
+            $.each(data.results, function (index, ability) {
+                fillList(ability.name, getAbilityDetails);
+            });
+
+
+        }).fail(function () {
+            console.log("Request to PokeApi failed.");
+        });
+    }
+
+    function getBerriesList(berriesUrl) {
+        $.getJSON(berriesUrl).done(function (data) {
+            listDiv.empty();
+
+            $.each(data.results, function (index, berry) {
+                fillList(berry.name, getBerryDetails);
+            });
+        }).fail(function () {
+            console.log("Request to PokeApi failed.");
+        });
+    }
 
     //DETAILS GENERATING FUNCTIONS
 
@@ -352,5 +418,50 @@ $(function () {
         event.preventDefault();
     }
 
+    function getAbilityDetails() {
+        var name = $(this).attr("id");
+        $.getJSON(singleAbilUrl + "/" + name).done(function (details) {
+            console.log(details);
+            pokemonDiv.empty();
+            pokemonDiv.css("opacity", 0);
+            infoDiv.css("opacity", 0);
+
+            titleRow.empty();
+            infoRow.empty();
+
+            pokemonDiv.append("<h1>" + name.charAt(0).toUpperCase() + name.slice(1) + "</h1>");
+            pokemonDiv.append("<h3> Effect: </h3>");
+            pokemonDiv.append("<p>" + details.effect_entries[0].effect + "</p>");
+            pokemonDiv.append("<h3>Short Effect: </h3>");
+            pokemonDiv.append("<p>" + details.effect_entries[0].short_effect + "</p>");
+                
+            pokemonDiv.delay(100).fadeTo(400, 1);
+            infoDiv.delay(400).fadeTo(400, 1);
+        });
+        event.preventDefault();
+    }
+
+    function getBerryDetails() {
+        var name = $(this).attr("id");
+        $.getJSON(singleBerryUrl + "/" + name).done(function(details){
+            console.log(details);
+
+            pokemonDiv.empty();
+            pokemonDiv.css("opacity", 0);
+            infoDiv.css("opacity", 0);
+
+            titleRow.empty();
+            infoRow.empty();
+
+            pokemonDiv.append("<h1>" + name.charAt(0).toUpperCase() + name.slice(1) + " Berry</p>");
+            //pokemonDiv.append("<img src='" + )
+            //getting the sprite will be tricky
+            //you have to get it from its item entry
+
+            pokemonDiv.delay(100).fadeTo(400, 1);
+            infoDiv.delay(400).fadeTo(400, 1);
+        });
+        event.preventDefault();
+    }
 
 });
