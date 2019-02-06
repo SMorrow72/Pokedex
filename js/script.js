@@ -62,8 +62,8 @@ $(function () {
        
         var sortForm = $("<form id='sortForm'>");
         sortForm.append("<h2>Sort By:</h2>");
-        var sortBtn1 = $("<label class='container'>Gen<input type='radio' class='btn sortBy_btn' name='sortMode' value='gen' checked='checked'></label>");
-        var sortBtn2 = $("<label class='container'>Type<input type='radio' class='btn sortBy_btn' name='sortMode' value='type'></label>");
+        var sortBtn1 = $("<label class='container btn selectedSort' id='genBtn'>Gen<input type='radio' name='sortMode' value='gen' checked='checked'></label>");
+        var sortBtn2 = $("<label class='container btn' id='typeBtn'>Type<input type='radio' name='sortMode' value='type'></span></label>");
 
         sortBtn1.change(sortSwitch);
         sortBtn2.change(sortSwitch);
@@ -215,8 +215,10 @@ $(function () {
             genBtnDiv.delay(400).slideToggle(300);
         } else {
             genBtnDiv.slideToggle(300);
-            typeBtnDiv.delay(400).slideToggle(300);
+            typeBtnDiv.delay(400).slideToggle(300);            
         }
+        $("#genBtn").toggleClass("selectedSort");
+        $("#typeBtn").toggleClass("selectedSort");
 
     }
 
@@ -380,9 +382,14 @@ $(function () {
             var typeName = details.type.name;
             pokemonDiv.append("<p class='type-label " + typeName + "' style='margin-top:2px;'>" + typeName.charAt(0).toUpperCase() + typeName.slice(1) + " ");
             pokemonDiv.append("</br> </br>");
-            var description = details.flavor_text_entries[2].flavor_text;
-            pokemonDiv.append("<h3>Description: ");
-            pokemonDiv.append("<p>" + description + "</p>");
+            if (details.flavor_text_entries[2] != null) {
+                var description = details.flavor_text_entries[2].flavor_text;
+                pokemonDiv.append("<h3>Description: ");
+                pokemonDiv.append("<p>" + description + "</p>");
+            } else {
+                pokemonDiv.append("<p>Move definition is not available.</p>");
+            }
+            
             pokemonDiv.delay(100).fadeTo(400, 1);
 
             titleRow.empty();

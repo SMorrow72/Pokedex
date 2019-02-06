@@ -24,8 +24,7 @@
     font-family: monospace;
 }
 
-.nav{
-    
+.nav{    
     height: 20px;
 }
 
@@ -93,44 +92,78 @@
 
 .btn {
     font-family: monospace;
-    border-style:solid;
-    border-width: 2px;
-    border-radius: 5px;
+    border: none;
+    border-radius: 10px;
+    padding: 2px;
+    outline: none;
 }
 
 .navBtn {
     margin: 10px;
     background-color: #18dd22;
-    border-color: #11a319;
+    box-shadow: 0 4px #11a319;
     font-size: 20px;
 }
 
 .selectedNav {
     background-color: #11a319;
-    border-color: #18dd22;
+    box-shadow: 0 2px #666;
+    outline: none;
+    transform: translateY(2px);
 }
 
 .opt_btn {
     margin: 10px 35px;
     vertical-align: top;
     background-color: #4286f4;
-    border-color: #1f4ce0;
-    font-size: 14px;    
+    box-shadow: 0 4px #1f4ce0;
+    font-size: 14px;
 }
 
 .selectedOption {
     background-color: #1f4ce0;
-    border-color: #4286f4;
+    box-shadow: 0 1px #666;
+    outline:none;
+    transform: translateY(2px);
 }
 
-.sortBy_btn {
-    vertical-align: top;
+/*Sorting stuff*/
+#sortForm{
+    margin: 10px auto;
+}
+
+#sortForm h2{
+    margin: 10px 16px;
+}
+
+.container {
+    background-color: #ff6be1;
+    margin: 5px 6px;
+    clear: both;
+    padding: 2px;
+    box-shadow: 0 4px #fc23d0;
+    font-weight: 500;
+}
+
+.container input{
+    position:absolute;
+    opacity:0;
+    cursor:pointer;
+    height:0;
+    width:0;
 }
 
 .selectedSort {
-    background-color: #fc20b6;
-    border-color: #ff4cc6;
+    background-color: #fc23d0;
+    box-shadow: 0 1px #666;
+    outline: none;
+    transform: translateY(2px);
 }
+
+#genBtn{
+    margin-left:20px
+}
+
 
 
 /*# sourceMappingURL=style.css.map */
