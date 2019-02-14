@@ -88,6 +88,11 @@
     margin:5px;
 }
 
+.itemImg{
+    height:100px;
+    width:100px;
+}
+
 /*Buttons:*/
 
 .btn {
@@ -125,6 +130,10 @@
     box-shadow: 0 1px #666;
     outline:none;
     transform: translateY(2px);
+}
+
+.pocket_btn{
+    width: 75px;
 }
 
 /*Sorting stuff*/
