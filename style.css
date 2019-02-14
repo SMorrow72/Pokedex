@@ -1,0 +1,178 @@
+﻿body {
+    font-size: 16px;
+    font-family: monospace;
+}
+
+
+#content {
+    overflow: auto;
+    width: 80%;
+    background-color: #fff;
+    margin: 30px auto 0 auto;
+    padding: 20px 30px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+
+#pokedex {
+    background-color: #ff1919;
+    border: 5px solid #bf0d0d;
+    height: 600px;
+    padding: 10px;
+    font-family: monospace;
+}
+
+.nav{    
+    height: 20px;
+}
+
+
+
+#pokedex_table {
+    margin: auto;
+    vertical-align: middle;
+    height: 90%;
+    width: 95%;
+}
+
+#pokedex_table tr {
+    margin: 10px;
+}
+
+#dtCol {
+    color: #48492e;
+    width: 55%;
+}
+
+#optionsCol{
+    width:15%;
+}
+
+#options{
+    height:90%;
+}
+
+#listCol{
+    width:20%;
+}
+
+
+#pokemon-details {
+    border: 3px solid #939393;
+    background-color: #f3f4d9;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 95%;
+    padding: 20px;
+}
+
+#list {
+    border: 5px solid #939393;
+    background-color: #dfe2ac;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 95%;
+    width: 100%;
+    padding-left: 5px;
+}
+
+.infoTable{
+    width:100%
+}
+
+.infoCol{
+    vertical-align: top;
+    width: 25%;
+    margin:5px;
+}
+
+.itemImg{
+    height:100px;
+    width:100px;
+}
+
+/*Buttons:*/
+
+.btn {
+    font-family: monospace;
+    border: none;
+    border-radius: 10px;
+    padding: 2px;
+    outline: none;
+}
+
+.navBtn {
+    margin: 10px;
+    background-color: #18dd22;
+    box-shadow: 0 4px #11a319;
+    font-size: 20px;
+}
+
+.selectedNav {
+    background-color: #11a319;
+    box-shadow: 0 2px #666;
+    outline: none;
+    transform: translateY(2px);
+}
+
+.opt_btn {
+    margin: 10px 35px;
+    vertical-align: top;
+    background-color: #4286f4;
+    box-shadow: 0 4px #1f4ce0;
+    font-size: 14px;
+}
+
+.selectedOption {
+    background-color: #1f4ce0;
+    box-shadow: 0 1px #666;
+    outline:none;
+    transform: translateY(2px);
+}
+
+.pocket_btn{
+    width: 75px;
+}
+
+/*Sorting stuff*/
+#sortForm{
+    margin: 10px auto;
+}
+
+#sortForm h2{
+    margin: 10px 16px;
+}
+
+.container {
+    background-color: #ff6be1;
+    margin: 5px 6px;
+    clear: both;
+    padding: 2px;
+    box-shadow: 0 4px #fc23d0;
+    font-weight: 500;
+}
+
+.container input{
+    position:absolute;
+    opacity:0;
+    cursor:pointer;
+    height:0;
+    width:0;
+}
+
+.selectedSort {
+    background-color: #fc23d0;
+    box-shadow: 0 1px #666;
+    outline: none;
+    transform: translateY(2px);
+}
+
+#genBtn{
+    margin-left:20px
+}
+
+
+
+/*# sourceMappingURL=style.css.map */
