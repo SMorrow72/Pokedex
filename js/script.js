@@ -13,8 +13,8 @@ $(function () {
     var pokemonByName = "https://pokeapi.co/api/v2/pokemon/";
     var abilUrl = "https://pokeapi.co/api/v2/ability?limit=300";
     var singleAbilUrl = "https://pokeapi.co/api/v2/ability";
-    var berriesUrl = "https://pokeapi.co/api/v2/berry?limit=100";
-    var singleBerryUrl = "https://pokeapi.co/api/v2/berry";
+    var itemsUrl = "https://pokeapi.co/api/v2/item?limit=1000";
+    var singleItemUrl = "https://pokeapi.co/api/v2/item";
     var movesUrl = "https://pokeapi.co/api/v2/move?limit=800";
     var singleMoveUrl = "https://pokeapi.co/api/v2/move";
 
@@ -33,7 +33,7 @@ $(function () {
         } else if ($(this).attr("id") == "abilBtn") {
             abilitiesMode();
         } else {
-            berriesMode();
+            itemsMode();
         }
 
     });
@@ -82,9 +82,7 @@ $(function () {
         appendGenBtn(4);
         appendGenBtn(5);
         appendGenBtn(6);
-        appendGenBtn(7);
-
-        
+        appendGenBtn(7);       
 
         appendTypeBtns("pokemon");
         var typeBtnDiv = $("#typeBtnDiv");
@@ -105,9 +103,10 @@ $(function () {
 
     }
 
-    function berriesMode() {
+    function itemsMode() {
         clearControls();
-        getBerriesList(berriesUrl);
+        getItemsList(itemsUrl);
+        appendPocketBtns();
     } 
 
 
@@ -187,6 +186,42 @@ $(function () {
 
     }
 
+    function appendPocketBtns() {
+        var pocketsUrl = "https://pokeapi.co/api/v2/item-pocket";
+        var pocketBtnDiv = $("<div>").attr("id", "pocketBtnDiv").css("margin", "0").css("padding", "0");
+        pocketBtnDiv.append("<h2>Bag Pocket:<h2>");
+
+        $.getJSON(pocketsUrl).done(function (data) {
+            $.each(data.results, function (index, pocket) {
+                var pocketName = pocket.name;
+                var singlePocketUrl = pocketsUrl + "/" + pocketName;
+
+                var btn = $("<button class ='btn opt_btn pocket_btn'>").html(pocketName.charAt(0).toUpperCase() + pocketName.slice(1));
+
+                btn.click(function () {
+                    listDiv.empty();
+
+                    $.getJSON(singlePocketUrl).done(function (pocketData) {
+                        //Okay, these contain CATEGORIES, which then contain ITEMS
+                        $.each(pocketData.categories, function (index, cat) {
+                            var catUrl = "https://pokeapi.co/api/v2/item-category/" + cat.name;
+
+                            $.getJSON(catUrl).done(function (data) {
+                                $.each(data.items, function (index, item) {
+                                    fillList(item.name, getItemDetails);
+                                });
+                            });
+                        });
+                    })
+                });
+
+                pocketBtnDiv.append(btn);
+            });
+
+        });
+        optionsDiv.append(pocketBtnDiv);
+    }
+
     function appendTitleCol(text) {
         var td;
         var strong = $("<strong>").html(text);
@@ -199,7 +234,7 @@ $(function () {
 
     function fillList(entry, detailsFn) {
         var name = entry.charAt(0).toUpperCase() + entry.slice(1);
-        var link = $("<a>").attr("id", entry).attr("href", "#").append($("<strong>").text(name));
+        var link = $("<a>").attr("id", entry).attr("href", "#").append($("<strong>").text(name.replace("-", " ")));
         var par = $("<p>").append(link);
 
         par.appendTo(listDiv);
@@ -273,12 +308,12 @@ $(function () {
         });
     }
 
-    function getBerriesList(berriesUrl) {
-        $.getJSON(berriesUrl).done(function (data) {
+    function getItemsList(itemsUrl) {
+        $.getJSON(itemsUrl).done(function (data) {
             listDiv.empty();
 
-            $.each(data.results, function (index, berry) {
-                fillList(berry.name, getBerryDetails);
+            $.each(data.results, function (index, item) {
+                fillList(item.name, getItemDetails);
             });
         }).fail(function () {
             console.log("Request to PokeApi failed.");
@@ -441,16 +476,16 @@ $(function () {
             pokemonDiv.append("<p>" + details.effect_entries[0].effect + "</p>");
             pokemonDiv.append("<h3>Short Effect: </h3>");
             pokemonDiv.append("<p>" + details.effect_entries[0].short_effect + "</p>");
-                
+                       
             pokemonDiv.delay(100).fadeTo(400, 1);
             infoDiv.delay(400).fadeTo(400, 1);
         });
         event.preventDefault();
     }
 
-    function getBerryDetails() {
+    function getItemDetails() {
         var name = $(this).attr("id");
-        $.getJSON(singleBerryUrl + "/" + name).done(function(details){
+        $.getJSON(singleItemUrl + "/" + name).done(function(details){
             console.log(details);
 
             pokemonDiv.empty();
@@ -460,10 +495,38 @@ $(function () {
             titleRow.empty();
             infoRow.empty();
 
-            pokemonDiv.append("<h1>" + name.charAt(0).toUpperCase() + name.slice(1) + " Berry</p>");
-            //pokemonDiv.append("<img src='" + )
+            var itemName = name.charAt(0).toUpperCase() + name.slice(1);
+            pokemonDiv.append("<h1>" + itemName.replace("-", " "));
+            pokemonDiv.append("<img class='itemImg' src='" + details.sprites.default + "'>");
+            pokemonDiv.append("<p>" + details.flavor_text_entries[2].text + "<p>");
+            pokemonDiv.append("<h3>Effect:<h3>");
+            pokemonDiv.append("<p>" + details.effect_entries[0].effect + "<p>");
             //getting the sprite will be tricky
             //you have to get it from its item entry
+
+            appendTitleCol("Category");
+            //appendTitleCol("Effect");
+            appendTitleCol("Attributes");
+            appendTitleCol("Cost");
+
+            var catCol = $("<td>").attr("id", "catCol").attr("class", "infoCol");
+            //var effectCol = $("<td>").attr("id", "effectCol").attr("class", "infoCol");
+            var attrCol = $("<td>").attr("id", "attrCol").attr("class", "infoCol");
+            var costCol = $("<td>").attr("id", "costCol").attr("class", "infoCol");
+
+            catCol.append("<p>" + details.category.name + "<p>");
+
+            var attributes = details.attributes;
+            attributes.forEach(function (item) {
+                attrCol.append("<p>" + item.name + "<p>");
+            });
+
+            costCol.append("<p>" + details.cost + "<p>");
+
+            infoRow.append(catCol);
+            //infoRow.append(effectCol);
+            infoRow.append(attrCol);
+            infoRow.append(costCol);
 
             pokemonDiv.delay(100).fadeTo(400, 1);
             infoDiv.delay(400).fadeTo(400, 1);
