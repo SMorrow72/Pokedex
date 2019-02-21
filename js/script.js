@@ -56,7 +56,7 @@ $(function () {
 
         //Opening message from Professor Oak
         pokemonDiv.append("<img src='images/prof_oak.png' style='margin: 5px 165px' >")
-        pokemonDiv.append("<p>Hello there! Welcome to the world of pokemon! My name is Oak! People call me the pokemon Prof! This world is inhabited by creatures called pokemon! For some people, pokemon are pets. Others use them for fights. Myself... I study pokemon as a profession.</p>");
+        pokemonDiv.append("<p>Hello there! Welcome to the world of Pokemon! My name is Oak! People call me the Pokemon Professor! This world is inhabited by creatures called Pokemon! For some people, Pokemon are pets. Others use them for fights. Myself... I study Pokemon as a profession.</p>");
         pokemonDiv.append("<p>This here is my latest invention, the Pokedex! It automatically records data on Pokemon you've seen or caught! It's a hi-tech encyclopedia!</p>");
         pokemonDiv.append("<p>To make a complete guide on all the Pokemon in the world... That was my dream! But, I'm too old! I can't do it! So, I want you two to fulfill my dream for me! Get moving, you two! This is a great undertaking in Pokemon history!</p>");
        
@@ -199,6 +199,9 @@ $(function () {
                 var btn = $("<button class ='btn opt_btn pocket_btn'>").html(pocketName.charAt(0).toUpperCase() + pocketName.slice(1));
 
                 btn.click(function () {
+                    selectedOption.toggleClass("selectedOption");
+                    $(this).toggleClass("selectedOption");
+                    selectedOption = $(this);
                     listDiv.empty();
 
                     $.getJSON(singlePocketUrl).done(function (pocketData) {
@@ -233,6 +236,7 @@ $(function () {
     //MISCELLANEOUS FUNCTIONS
 
     function fillList(entry, detailsFn) {
+
         var name = entry.charAt(0).toUpperCase() + entry.slice(1);
         var link = $("<a>").attr("id", entry).attr("href", "#").append($("<strong>").text(name.replace("-", " ")));
         var par = $("<p>").append(link);
@@ -495,8 +499,17 @@ $(function () {
             titleRow.empty();
             infoRow.empty();
 
-            var itemName = name.charAt(0).toUpperCase() + name.slice(1);
-            pokemonDiv.append("<h1>" + itemName.replace("-", " "));
+            var itemName = (name.charAt(0).toUpperCase() + name.slice(1)).replace("-", " ");
+
+            //Get the move name for machines
+            if (details.category.name == "all-machines"){
+                console.log("Machine entry");
+                var effect_entry = details.effect_entries[0].effect;
+                var moveName = effect_entry.slice(8, effect_entry.indexOf("to"));
+                itemName += " - " + moveName;
+            }
+
+            pokemonDiv.append("<h1>" + itemName);
             pokemonDiv.append("<img class='itemImg' src='" + details.sprites.default + "'>");
             pokemonDiv.append("<p>" + details.flavor_text_entries[2].text + "<p>");
             pokemonDiv.append("<h3>Effect:<h3>");
